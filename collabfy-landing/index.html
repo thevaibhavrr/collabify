@@ -1,0 +1,1786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Collabfy - Next-generation influencer marketing platform connecting Brands and Creators">
+    <meta name="keywords" content="influencer marketing, brand collaboration, creator platform, social media marketing">
+    <title>Collabfy | Where Brands Meet Influence</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    
+    <!-- Lenis Smooth Scroll -->
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Custom Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: '#15173D',
+                        purple: '#982598',
+                        pink: '#E491C9',
+                        pearl: '#F1E9E9'
+                    },
+                    fontFamily: {
+                        heading: ['Playfair Display', 'serif'],
+                        body: ['Inter', 'sans-serif'],
+                        accent: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Custom Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            background: #F1E9E9;
+        }
+        
+        /* Custom Cursor */
+        .custom-cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #982598;
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease;
+            mix-blend-mode: difference;
+        }
+        
+        .custom-cursor.active {
+            transform: scale(1.5);
+            background: rgba(152, 37, 152, 0.3);
+        }
+        
+        /* Scroll Progress Bar */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #982598, #E491C9);
+            z-index: 10000;
+            width: 0%;
+        }
+        
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .glass-dark {
+            background: rgba(21, 23, 61, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Gradient Animations */
+        @keyframes gradient-shift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .gradient-animate {
+            background-size: 200% 200%;
+            animation: gradient-shift 10s ease infinite;
+        }
+        
+        /* Floating Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .float {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .float-delayed {
+            animation: float 3s ease-in-out infinite;
+            animation-delay: 1s;
+        }
+        
+        /* Pulse Animation */
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(152, 37, 152, 0.5); }
+            50% { box-shadow: 0 0 40px rgba(152, 37, 152, 0.8); }
+        }
+        
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite;
+        }
+        
+        /* Logo Scroll */
+        @keyframes scroll-logos {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        
+        .logo-scroll {
+            animation: scroll-logos 30s linear infinite;
+        }
+        
+        .logo-scroll:hover {
+            animation-play-state: paused;
+        }
+        
+        /* Particle Background */
+        .particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float-particle 20s infinite;
+        }
+        
+        @keyframes float-particle {
+            0%, 100% { transform: translateY(0) translateX(0); opacity: 0.3; }
+            50% { transform: translateY(-100px) translateX(50px); opacity: 0.6; }
+        }
+        
+        /* Form Input Animations */
+        .input-group {
+            position: relative;
+        }
+        
+        .input-group input:focus ~ label,
+        .input-group input:not(:placeholder-shown) ~ label {
+            transform: translateY(-24px) scale(0.85);
+            color: #982598;
+        }
+        
+        /* Loading Spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top: 3px solid #982598;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Preloader */
+        .preloader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #15173D;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+            transition: opacity 0.5s ease;
+        }
+        
+        /* Circular Progress */
+        .circular-progress {
+            width: 60px;
+            height: 60px;
+            position: relative;
+        }
+        
+        .circular-progress svg {
+            transform: rotate(-90deg);
+        }
+        
+        .circular-progress circle {
+            fill: none;
+            stroke-width: 4;
+        }
+        
+        .circular-progress .bg {
+            stroke: rgba(152, 37, 152, 0.2);
+        }
+        
+        .circular-progress .progress {
+            stroke: #982598;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 1s ease;
+        }
+        
+        /* Video Card Hover */
+        .video-card:hover .play-btn {
+            transform: scale(1.1);
+        }
+        
+        /* Magnetic Button Effect */
+        .magnetic-btn {
+            transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        /* Text Reveal */
+        .text-reveal {
+            clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .custom-cursor {
+                display: none;
+            }
+            
+            h1 {
+                font-size: 40px !important;
+            }
+            
+            h2 {
+                font-size: 32px !important;
+            }
+        }
+        
+        /* Reduced Motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <!-- Preloader -->
+    <div class="preloader" id="preloader">
+        <div class="text-center">
+            <h1 class="font-heading text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple to-pink mb-4">Collabfy</h1>
+            <div class="spinner mx-auto"></div>
+        </div>
+    </div>
+    
+    <!-- Custom Cursor -->
+    <div class="custom-cursor hidden md:block" id="cursor"></div>
+    
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 glass-dark transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="font-heading text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple to-pink">Collabfy</a>
+                
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#how-it-works" class="text-pearl hover:text-pink transition-colors font-medium">How It Works</a>
+                    <a href="#creators" class="text-pearl hover:text-pink transition-colors font-medium">Creators</a>
+                    <a href="#services" class="text-pearl hover:text-pink transition-colors font-medium">Services</a>
+                    <a href="#team" class="text-pearl hover:text-pink transition-colors font-medium">Team</a>
+                    <a href="#contact" class="bg-purple text-white px-6 py-2 rounded-full font-accent font-semibold hover:bg-pink transition-all magnetic-btn">Get Started</a>
+                </div>
+                
+                <button class="md:hidden text-pearl" id="mobileMenuBtn">
+                    <i data-lucide="menu" class="w-8 h-8"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Mobile Menu -->
+    <div class="fixed inset-0 bg-navy z-40 transform translate-x-full transition-transform duration-300" id="mobileMenu">
+        <div class="p-6">
+            <button class="text-pearl mb-8" id="closeMobileMenu">
+                <i data-lucide="x" class="w-8 h-8"></i>
+            </button>
+            <div class="flex flex-col space-y-6 text-center">
+                <a href="#how-it-works" class="text-pearl text-xl hover:text-pink">How It Works</a>
+                <a href="#creators" class="text-pearl text-xl hover:text-pink">Creators</a>
+                <a href="#services" class="text-pearl text-xl hover:text-pink">Services</a>
+                <a href="#team" class="text-pearl text-xl hover:text-pink">Team</a>
+                <a href="#contact" class="bg-purple text-white px-8 py-3 rounded-full font-accent font-semibold">Get Started</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Hero Section -->
+    <section class="min-h-screen relative overflow-hidden gradient-animate" style="background: linear-gradient(135deg, #15173D 0%, #982598 100%);">
+        <!-- Particles -->
+        <div class="absolute inset-0 overflow-hidden" id="particles"></div>
+        
+        <!-- Floating Shapes -->
+        <div class="absolute top-20 left-10 w-32 h-32 bg-pink rounded-full blur-3xl opacity-20 float"></div>
+        <div class="absolute bottom-20 right-10 w-40 h-40 bg-purple rounded-full blur-3xl opacity-20 float-delayed"></div>
+        
+        <div class="container mx-auto px-6 pt-24 pb-12 min-h-screen flex items-center">
+            <div class="grid md:grid-cols-2 gap-12 items-center w-full">
+                <!-- Left Content -->
+                <div class="text-white space-y-8">
+                    <h1 class="font-heading text-6xl md:text-7xl lg:text-8xl font-bold leading-tight" id="heroTitle">
+                        <span class="block overflow-hidden">
+                            <span class="inline-block text-reveal">Where Brands</span>
+                        </span>
+                        <span class="block overflow-hidden">
+                            <span class="inline-block text-reveal text-transparent bg-clip-text bg-gradient-to-r from-pink to-purple">Meet Influence</span>
+                        </span>
+                    </h1>
+                    
+                    <p class="text-lg md:text-xl text-pearl/80 max-w-lg" id="heroSubtitle">
+                        Connect with 50,000+ verified creators. Launch campaigns that convert. Measure real ROI.
+                    </p>
+                    
+                    <div class="flex flex-wrap gap-4" id="heroCTAs">
+                        <a href="#contact" class="group bg-purple text-white px-8 py-4 rounded-full font-accent font-semibold text-lg hover:scale-105 transition-all pulse-glow inline-flex items-center">
+                            I'm a Brand
+                            <i data-lucide="arrow-right" class="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+                        <a href="#contact" class="group border-2 border-pink text-white px-8 py-4 rounded-full font-accent font-semibold text-lg hover:bg-gradient-to-r hover:from-purple hover:to-pink transition-all inline-flex items-center">
+                            I'm a Creator
+                            <i data-lucide="sparkles" class="ml-2 w-5 h-5 group-hover:rotate-12 transition-transform"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Trust Badges -->
+                    <div class="pt-8 border-t border-white/20">
+                        <div class="flex flex-wrap gap-8 text-center">
+                            <div>
+                                <div class="text-3xl md:text-4xl font-bold text-pink" data-count="500">0</div>
+                                <div class="text-sm text-pearl/70">Brands</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl md:text-4xl font-bold text-pink" data-count="50000">0</div>
+                                <div class="text-sm text-pearl/70">Creators</div>
+                            </div>
+                            <div>
+                                <div class="text-3xl md:text-4xl font-bold text-pink" data-count="98">0</div>
+                                <div class="text-sm text-pearl/70">Satisfaction %</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Content - Hero Image -->
+                <div class="relative hidden md:block">
+                    <div class="relative z-10 float" id="heroImage">
+                        <img src="https://tixteen.com/static/media/Banner1.755197520878e8347245.png" 
+                             alt="Collabfy Platform" 
+                             class="rounded-2xl shadow-2xl w-full pulse-glow"
+                             style="filter: drop-shadow(0 0 30px rgba(152, 37, 152, 0.5));">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Industry Leaders Section -->
+    <section class="py-20 bg-navy">
+        <div class="container mx-auto px-6">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-pink mb-12" data-aos="fade-up">
+                Trusted by Industry Leaders
+            </h2>
+            
+            <div class="relative overflow-hidden">
+                <div class="flex logo-scroll" id="logoScroll">
+                    <!-- Logos Row 1 -->
+                    <div class="flex items-center justify-around min-w-full space-x-16 px-8">
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">NIKE</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="18">Coca-Cola</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">SAMSUNG</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">adidas</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="18">Red Bull</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <!-- Duplicate for seamless loop -->
+                    <div class="flex items-center justify-around min-w-full space-x-16 px-8">
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">NIKE</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="18">Coca-Cola</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">SAMSUNG</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">adidas</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="18">Red Bull</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Second Row -->
+            <div class="relative overflow-hidden mt-8">
+                <div class="flex logo-scroll" style="animation-direction: reverse; animation-duration: 35s;">
+                    <div class="flex items-center justify-around min-w-full space-x-16 px-8">
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">Spotify</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="18">NETFLIX</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">amazon</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">Apple</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="18">Google</text>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-around min-w-full space-x-16 px-8">
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">Spotify</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="18">NETFLIX</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">amazon</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="20">Apple</text>
+                            </svg>
+                        </div>
+                        <div class="logo-item grayscale hover:grayscale-0 hover:scale-110 transition-all duration-300 cursor-pointer">
+                            <svg class="w-32 h-12 text-white" viewBox="0 0 100 40" fill="currentColor">
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-weight="bold" font-size="18">Google</text>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Creators Section -->
+    <section class="py-20 bg-pearl" id="creators">
+        <div class="container mx-auto px-6">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-navy mb-8">
+                Meet Our Top Creators
+            </h2>
+            
+            <!-- Filter Tabs -->
+            <div class="flex flex-wrap justify-center gap-4 mb-12">
+                <button class="filter-tab active px-6 py-2 rounded-full bg-purple text-white font-accent font-medium transition-all" data-filter="all">All</button>
+                <button class="filter-tab px-6 py-2 rounded-full border-2 border-purple text-navy hover:bg-purple hover:text-white font-accent font-medium transition-all" data-filter="fashion">Fashion</button>
+                <button class="filter-tab px-6 py-2 rounded-full border-2 border-purple text-navy hover:bg-purple hover:text-white font-accent font-medium transition-all" data-filter="tech">Tech</button>
+                <button class="filter-tab px-6 py-2 rounded-full border-2 border-purple text-navy hover:bg-purple hover:text-white font-accent font-medium transition-all" data-filter="lifestyle">Lifestyle</button>
+                <button class="filter-tab px-6 py-2 rounded-full border-2 border-purple text-navy hover:bg-purple hover:text-white font-accent font-medium transition-all" data-filter="gaming">Gaming</button>
+                <button class="filter-tab px-6 py-2 rounded-full border-2 border-purple text-navy hover:bg-purple hover:text-white font-accent font-medium transition-all" data-filter="beauty">Beauty</button>
+            </div>
+            
+            <!-- Creator Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Creator Card 1 -->
+                <div class="creator-card glass p-6 rounded-2xl hover:scale-103 transition-all duration-300 group" data-category="fashion">
+                    <div class="relative overflow-hidden rounded-xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop" 
+                             alt="Sarah Johnson" 
+                             class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute top-4 right-4 bg-pink text-white px-3 py-1 rounded-full text-sm font-accent">Fashion</div>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-2">Sarah Johnson</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center text-purple">
+                            <i data-lucide="users" class="w-4 h-4 mr-1"></i>
+                            <span class="font-semibold">125K Followers</span>
+                        </div>
+                        <div class="circular-progress">
+                            <svg width="60" height="60">
+                                <circle class="bg" cx="30" cy="30" r="26"></circle>
+                                <circle class="progress" cx="30" cy="30" r="26" 
+                                        stroke-dasharray="163.36" 
+                                        stroke-dashoffset="49" 
+                                        style="stroke-dashoffset: 49;"></circle>
+                            </svg>
+                            <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-purple">85%</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-purple text-white py-3 rounded-full font-accent font-semibold group-hover:bg-pink transition-all flex items-center justify-center">
+                        View Profile
+                        <i data-lucide="arrow-right" class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+                
+                <!-- Creator Card 2 -->
+                <div class="creator-card glass p-6 rounded-2xl hover:scale-103 transition-all duration-300 group" data-category="tech">
+                    <div class="relative overflow-hidden rounded-xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop" 
+                             alt="Michael Chen" 
+                             class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute top-4 right-4 bg-pink text-white px-3 py-1 rounded-full text-sm font-accent">Tech</div>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-2">Michael Chen</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center text-purple">
+                            <i data-lucide="users" class="w-4 h-4 mr-1"></i>
+                            <span class="font-semibold">250K Followers</span>
+                        </div>
+                        <div class="circular-progress">
+                            <svg width="60" height="60">
+                                <circle class="bg" cx="30" cy="30" r="26"></circle>
+                                <circle class="progress" cx="30" cy="30" r="26" 
+                                        stroke-dasharray="163.36" 
+                                        stroke-dashoffset="32.67"></circle>
+                            </svg>
+                            <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-purple">90%</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-purple text-white py-3 rounded-full font-accent font-semibold group-hover:bg-pink transition-all flex items-center justify-center">
+                        View Profile
+                        <i data-lucide="arrow-right" class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+                
+                <!-- Creator Card 3 -->
+                <div class="creator-card glass p-6 rounded-2xl hover:scale-103 transition-all duration-300 group" data-category="lifestyle">
+                    <div class="relative overflow-hidden rounded-xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop" 
+                             alt="Emma Williams" 
+                             class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute top-4 right-4 bg-pink text-white px-3 py-1 rounded-full text-sm font-accent">Lifestyle</div>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-2">Emma Williams</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center text-purple">
+                            <i data-lucide="users" class="w-4 h-4 mr-1"></i>
+                            <span class="font-semibold">180K Followers</span>
+                        </div>
+                        <div class="circular-progress">
+                            <svg width="60" height="60">
+                                <circle class="bg" cx="30" cy="30" r="26"></circle>
+                                <circle class="progress" cx="30" cy="30" r="26" 
+                                        stroke-dasharray="163.36" 
+                                        stroke-dashoffset="40.84"></circle>
+                            </svg>
+                            <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-purple">88%</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-purple text-white py-3 rounded-full font-accent font-semibold group-hover:bg-pink transition-all flex items-center justify-center">
+                        View Profile
+                        <i data-lucide="arrow-right" class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+                
+                <!-- Creator Card 4 -->
+                <div class="creator-card glass p-6 rounded-2xl hover:scale-103 transition-all duration-300 group" data-category="gaming">
+                    <div class="relative overflow-hidden rounded-xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop" 
+                             alt="Alex Rodriguez" 
+                             class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute top-4 right-4 bg-pink text-white px-3 py-1 rounded-full text-sm font-accent">Gaming</div>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-2">Alex Rodriguez</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center text-purple">
+                            <i data-lucide="users" class="w-4 h-4 mr-1"></i>
+                            <span class="font-semibold">320K Followers</span>
+                        </div>
+                        <div class="circular-progress">
+                            <svg width="60" height="60">
+                                <circle class="bg" cx="30" cy="30" r="26"></circle>
+                                <circle class="progress" cx="30" cy="30" r="26" 
+                                        stroke-dasharray="163.36" 
+                                        stroke-dashoffset="24.5"></circle>
+                            </svg>
+                            <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-purple">92%</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-purple text-white py-3 rounded-full font-accent font-semibold group-hover:bg-pink transition-all flex items-center justify-center">
+                        View Profile
+                        <i data-lucide="arrow-right" class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+                
+                <!-- Creator Card 5 -->
+                <div class="creator-card glass p-6 rounded-2xl hover:scale-103 transition-all duration-300 group" data-category="beauty">
+                    <div class="relative overflow-hidden rounded-xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop" 
+                             alt="Jessica Lee" 
+                             class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute top-4 right-4 bg-pink text-white px-3 py-1 rounded-full text-sm font-accent">Beauty</div>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-2">Jessica Lee</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center text-purple">
+                            <i data-lucide="users" class="w-4 h-4 mr-1"></i>
+                            <span class="font-semibold">210K Followers</span>
+                        </div>
+                        <div class="circular-progress">
+                            <svg width="60" height="60">
+                                <circle class="bg" cx="30" cy="30" r="26"></circle>
+                                <circle class="progress" cx="30" cy="30" r="26" 
+                                        stroke-dasharray="163.36" 
+                                        stroke-dashoffset="36.75"></circle>
+                            </svg>
+                            <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-purple">89%</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-purple text-white py-3 rounded-full font-accent font-semibold group-hover:bg-pink transition-all flex items-center justify-center">
+                        View Profile
+                        <i data-lucide="arrow-right" class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+                
+                <!-- Creator Card 6 -->
+                <div class="creator-card glass p-6 rounded-2xl hover:scale-103 transition-all duration-300 group" data-category="fashion">
+                    <div class="relative overflow-hidden rounded-xl mb-4">
+                        <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop" 
+                             alt="David Kim" 
+                             class="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-300">
+                        <div class="absolute top-4 right-4 bg-pink text-white px-3 py-1 rounded-full text-sm font-accent">Fashion</div>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-2">David Kim</h3>
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center text-purple">
+                            <i data-lucide="users" class="w-4 h-4 mr-1"></i>
+                            <span class="font-semibold">145K Followers</span>
+                        </div>
+                        <div class="circular-progress">
+                            <svg width="60" height="60">
+                                <circle class="bg" cx="30" cy="30" r="26"></circle>
+                                <circle class="progress" cx="30" cy="30" r="26" 
+                                        stroke-dasharray="163.36" 
+                                        stroke-dashoffset="44.91"></circle>
+                            </svg>
+                            <span class="absolute inset-0 flex items-center justify-center text-xs font-bold text-purple">86%</span>
+                        </div>
+                    </div>
+                    <button class="w-full bg-purple text-white py-3 rounded-full font-accent font-semibold group-hover:bg-pink transition-all flex items-center justify-center">
+                        View Profile
+                        <i data-lucide="arrow-right" class="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Comparison Section -->
+    <section class="py-20 gradient-animate" style="background: linear-gradient(135deg, #982598 0%, #E491C9 100%);" id="comparison">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <!-- Left Content -->
+                <div class="text-white">
+                    <h2 class="font-heading text-4xl md:text-5xl font-bold mb-8">
+                        Ditch Outdated Ads.<br>Step Into the Future.
+                    </h2>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4 comparison-item">
+                            <div class="w-8 h-8 rounded-full bg-red-500/30 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="x" class="w-5 h-5 text-red-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg line-through opacity-70">Traditional Ads: Low Engagement</h4>
+                                <p class="text-white/70 text-sm">Average CTR: 0.05%</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 comparison-item">
+                            <div class="w-8 h-8 rounded-full bg-green-500/30 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="check" class="w-5 h-5 text-green-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">Influencer Marketing: 11x ROI</h4>
+                                <p class="text-white/70 text-sm">Industry-leading returns</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 comparison-item">
+                            <div class="w-8 h-8 rounded-full bg-red-500/30 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="x" class="w-5 h-5 text-red-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg line-through opacity-70">Generic Content: Ignored</h4>
+                                <p class="text-white/70 text-sm">Banner blindness effect</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 comparison-item">
+                            <div class="w-8 h-8 rounded-full bg-green-500/30 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="check" class="w-5 h-5 text-green-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">Authentic Stories: Viral</h4>
+                                <p class="text-white/70 text-sm">Organic reach & engagement</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 comparison-item">
+                            <div class="w-8 h-8 rounded-full bg-red-500/30 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="x" class="w-5 h-5 text-red-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg line-through opacity-70">Wasted Budget: No Results</h4>
+                                <p class="text-white/70 text-sm">Poor targeting efficiency</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start space-x-4 comparison-item">
+                            <div class="w-8 h-8 rounded-full bg-green-500/30 flex items-center justify-center flex-shrink-0">
+                                <i data-lucide="check" class="w-5 h-5 text-green-300"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-lg">Targeted Reach: Real Conversions</h4>
+                                <p class="text-white/70 text-sm">AI-powered matching</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Content - Video -->
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl" style="border: 2px solid #E491C9;">
+                    <video autoplay muted loop playsinline class="w-full h-full object-cover">
+                        <source src="https://tixteen.com/static/media/sider1.77cdcc50a2d5197122a2.mp4" type="video/mp4">
+                    </video>
+                    <div class="absolute inset-0 bg-gradient-to-t from-navy to-transparent opacity-60"></div>
+                    <button class="absolute inset-0 m-auto w-20 h-20 bg-purple/80 rounded-full flex items-center justify-center pulse-glow hover:scale-110 transition-transform">
+                        <i data-lucide="play" class="w-8 h-8 text-white ml-1"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Services Section -->
+    <section class="py-20 bg-pearl" id="services">
+        <div class="container mx-auto px-6">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-navy mb-16">
+                We Offer Expert Services in<br>Influencer Marketing
+            </h2>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Service Card 1 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg hover:-translate-y-4 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-purple rounded-full flex items-center justify-center mb-6 group-hover:rotate-360 transition-transform duration-500">
+                        <i data-lucide="target" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-3">Campaign Strategy</h3>
+                    <p class="text-gray-600 mb-4">Data-driven strategies tailored to your brand goals and target audience.</p>
+                    <div class="flex items-center text-purple font-accent font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        Learn More <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                    </div>
+                </div>
+                
+                <!-- Service Card 2 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg hover:-translate-y-4 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-purple rounded-full flex items-center justify-center mb-6 group-hover:rotate-360 transition-transform duration-500">
+                        <i data-lucide="bot" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-3">AI-Powered Matching</h3>
+                    <p class="text-gray-600 mb-4">Advanced algorithms connect you with perfect creator matches instantly.</p>
+                    <div class="flex items-center text-purple font-accent font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        Learn More <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                    </div>
+                </div>
+                
+                <!-- Service Card 3 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg hover:-translate-y-4 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-purple rounded-full flex items-center justify-center mb-6 group-hover:rotate-360 transition-transform duration-500">
+                        <i data-lucide="bar-chart-3" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-3">Real-Time Analytics</h3>
+                    <p class="text-gray-600 mb-4">Track performance metrics and ROI with comprehensive dashboards.</p>
+                    <div class="flex items-center text-purple font-accent font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        Learn More <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                    </div>
+                </div>
+                
+                <!-- Service Card 4 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg hover:-translate-y-4 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-purple rounded-full flex items-center justify-center mb-6 group-hover:rotate-360 transition-transform duration-500">
+                        <i data-lucide="camera" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-3">Content Creation</h3>
+                    <p class="text-gray-600 mb-4">Professional content production support for maximum impact.</p>
+                    <div class="flex items-center text-purple font-accent font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        Learn More <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                    </div>
+                </div>
+                
+                <!-- Service Card 5 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg hover:-translate-y-4 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-purple rounded-full flex items-center justify-center mb-6 group-hover:rotate-360 transition-transform duration-500">
+                        <i data-lucide="activity" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-3">Performance Tracking</h3>
+                    <p class="text-gray-600 mb-4">Monitor campaign success with detailed insights and reports.</p>
+                    <div class="flex items-center text-purple font-accent font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        Learn More <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                    </div>
+                </div>
+                
+                <!-- Service Card 6 -->
+                <div class="service-card bg-white p-8 rounded-2xl shadow-lg hover:-translate-y-4 transition-all duration-300 group">
+                    <div class="w-16 h-16 bg-purple rounded-full flex items-center justify-center mb-6 group-hover:rotate-360 transition-transform duration-500">
+                        <i data-lucide="shield-check" class="w-8 h-8 text-white"></i>
+                    </div>
+                    <h3 class="font-heading text-2xl font-bold text-navy mb-3">Brand Safety</h3>
+                    <p class="text-gray-600 mb-4">Ensure your brand is protected with vetted creators and content.</p>
+                    <div class="flex items-center text-purple font-accent font-semibold opacity-0 group-hover:opacity-100 transition-opacity">
+                        Learn More <i data-lucide="arrow-right" class="ml-2 w-4 h-4"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Team Section -->
+    <section class="py-20 bg-navy relative overflow-hidden" id="team">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-5">
+            <div class="absolute top-10 left-10 w-20 h-20 border-2 border-pink rounded-full"></div>
+            <div class="absolute top-40 right-20 w-32 h-32 border-2 border-purple rounded-full"></div>
+            <div class="absolute bottom-20 left-1/3 w-24 h-24 border-2 border-pink rotate-45"></div>
+        </div>
+        
+        <div class="container mx-auto px-6 relative z-10">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-pearl mb-16">
+                Our Professional Marketing Team
+            </h2>
+            
+            <!-- Team Image Background -->
+            <div class="relative max-w-5xl mx-auto">
+                <img src="https://tixteen.com/static/media/team.f093750547c9256c924a.png" 
+                     alt="Collabfy Team" 
+                     class="w-full rounded-2xl shadow-2xl">
+                <div class="absolute inset-0 bg-gradient-to-t from-navy via-transparent to-transparent"></div>
+                
+                <!-- Floating Team Cards -->
+                <div class="absolute -bottom-10 left-10 glass p-4 rounded-xl float team-card">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop" 
+                         alt="Jennifer Adams" 
+                         class="w-16 h-16 rounded-full object-cover mb-3">
+                    <h4 class="font-heading font-bold text-white">Jennifer Adams</h4>
+                    <p class="text-pink text-sm">CEO & Founder</p>
+                    <div class="flex space-x-2 mt-2">
+                        <a href="#" class="text-white hover:text-pink"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                        <a href="#" class="text-white hover:text-pink"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+                
+                <div class="absolute -top-10 right-10 glass p-4 rounded-xl float-delayed team-card">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop" 
+                         alt="Marcus Thompson" 
+                         class="w-16 h-16 rounded-full object-cover mb-3">
+                    <h4 class="font-heading font-bold text-white">Marcus Thompson</h4>
+                    <p class="text-pink text-sm">Head of Partnerships</p>
+                    <div class="flex space-x-2 mt-2">
+                        <a href="#" class="text-white hover:text-pink"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                        <a href="#" class="text-white hover:text-pink"><i data-lucide="twitter" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+                
+                <div class="absolute bottom-1/2 -right-16 glass p-4 rounded-xl float team-card" style="animation-delay: 0.5s;">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop" 
+                         alt="Sophia Martinez" 
+                         class="w-16 h-16 rounded-full object-cover mb-3">
+                    <h4 class="font-heading font-bold text-white">Sophia Martinez</h4>
+                    <p class="text-pink text-sm">Creative Director</p>
+                    <div class="flex space-x-2 mt-2">
+                        <a href="#" class="text-white hover:text-pink"><i data-lucide="linkedin" class="w-4 h-4"></i></a>
+                        <a href="#" class="text-white hover:text-pink"><i data-lucide="instagram" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- CTA Banner -->
+    <section class="py-20 gradient-animate relative overflow-hidden" style="background: linear-gradient(135deg, #15173D 0%, #982598 100%);">
+        <!-- Floating Elements -->
+        <div class="absolute top-10 left-10 w-32 h-32 bg-pink rounded-full blur-3xl opacity-20 float"></div>
+        <div class="absolute bottom-10 right-10 w-40 h-40 bg-purple rounded-full blur-3xl opacity-20 float-delayed"></div>
+        
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <h2 class="font-heading text-4xl md:text-6xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple to-pink mb-6">
+                Ready to Transform Your Brand?
+            </h2>
+            <p class="text-xl text-pearl/80 mb-8 max-w-2xl mx-auto">
+                Join 500+ brands already growing with Collabfy
+            </p>
+            <a href="#contact" class="inline-block bg-purple text-white px-12 py-5 rounded-full font-accent font-bold text-xl hover:scale-105 transition-all pulse-glow">
+                Get Started Now →
+            </a>
+            <p class="text-pearl/60 mt-6 text-sm">Free consultation • No commitment • 24h response</p>
+        </div>
+    </section>
+    
+    <!-- Video Showcase Section -->
+    <section class="py-20 bg-pearl">
+        <div class="container mx-auto px-6">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-navy mb-16">
+                Content That Sparks Curiosity and<br>Leaves a Lasting Impact!
+            </h2>
+            
+            <!-- Video Slider -->
+            <div class="relative">
+                <div class="overflow-hidden" id="videoSlider">
+                    <div class="flex space-x-6" id="videoSliderContent">
+                        <!-- Video Card 1 -->
+                        <div class="video-card flex-shrink-0 w-80 rounded-2xl overflow-hidden shadow-lg cursor-pointer group">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=300&fit=crop" 
+                                     alt="Video Thumbnail" 
+                                     class="w-full h-48 object-cover">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <div class="play-btn w-16 h-16 bg-purple/80 rounded-full flex items-center justify-center pulse-glow">
+                                        <i data-lucide="play" class="w-6 h-6 text-white ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-pink text-sm font-accent">Tech Review</span>
+                                    <span class="text-gray-500 text-sm"><i data-lucide="eye" class="w-3 h-3 inline"></i> 2.5M</span>
+                                </div>
+                                <h4 class="font-heading font-bold text-navy">Latest Smartphone Unboxing</h4>
+                            </div>
+                        </div>
+                        
+                        <!-- Video Card 2 -->
+                        <div class="video-card flex-shrink-0 w-80 rounded-2xl overflow-hidden shadow-lg cursor-pointer group">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=300&fit=crop" 
+                                     alt="Video Thumbnail" 
+                                     class="w-full h-48 object-cover">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <div class="play-btn w-16 h-16 bg-purple/80 rounded-full flex items-center justify-center pulse-glow">
+                                        <i data-lucide="play" class="w-6 h-6 text-white ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-pink text-sm font-accent">Fashion</span>
+                                    <span class="text-gray-500 text-sm"><i data-lucide="eye" class="w-3 h-3 inline"></i> 1.8M</span>
+                                </div>
+                                <h4 class="font-heading font-bold text-navy">Summer Collection Haul</h4>
+                            </div>
+                        </div>
+                        
+                        <!-- Video Card 3 -->
+                        <div class="video-card flex-shrink-0 w-80 rounded-2xl overflow-hidden shadow-lg cursor-pointer group">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400&h=300&fit=crop" 
+                                     alt="Video Thumbnail" 
+                                     class="w-full h-48 object-cover">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <div class="play-btn w-16 h-16 bg-purple/80 rounded-full flex items-center justify-center pulse-glow">
+                                        <i data-lucide="play" class="w-6 h-6 text-white ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-pink text-sm font-accent">Gaming</span>
+                                    <span class="text-gray-500 text-sm"><i data-lucide="eye" class="w-3 h-3 inline"></i> 3.2M</span>
+                                </div>
+                                <h4 class="font-heading font-bold text-navy">Epic Gaming Moments</h4>
+                            </div>
+                        </div>
+                        
+                        <!-- Video Card 4 -->
+                        <div class="video-card flex-shrink-0 w-80 rounded-2xl overflow-hidden shadow-lg cursor-pointer group">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&h=300&fit=crop" 
+                                     alt="Video Thumbnail" 
+                                     class="w-full h-48 object-cover">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <div class="play-btn w-16 h-16 bg-purple/80 rounded-full flex items-center justify-center pulse-glow">
+                                        <i data-lucide="play" class="w-6 h-6 text-white ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-pink text-sm font-accent">Lifestyle</span>
+                                    <span class="text-gray-500 text-sm"><i data-lucide="eye" class="w-3 h-3 inline"></i> 1.5M</span>
+                                </div>
+                                <h4 class="font-heading font-bold text-navy">Healthy Morning Routine</h4>
+                            </div>
+                        </div>
+                        
+                        <!-- Video Card 5 -->
+                        <div class="video-card flex-shrink-0 w-80 rounded-2xl overflow-hidden shadow-lg cursor-pointer group">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1596462502278-27bfdd403348?w=400&h=300&fit=crop" 
+                                     alt="Video Thumbnail" 
+                                     class="w-full h-48 object-cover">
+                                <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                    <div class="play-btn w-16 h-16 bg-purple/80 rounded-full flex items-center justify-center pulse-glow">
+                                        <i data-lucide="play" class="w-6 h-6 text-white ml-1"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-white">
+                                <div class="flex items-center justify-between mb-2">
+                                    <span class="text-pink text-sm font-accent">Beauty</span>
+                                    <span class="text-gray-500 text-sm"><i data-lucide="eye" class="w-3 h-3 inline"></i> 2.1M</span>
+                                </div>
+                                <h4 class="font-heading font-bold text-navy">Makeup Tutorial 2024</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Navigation Buttons -->
+                <button class="absolute left-0 top-1/2 -translate-y-1/2 bg-purple text-white p-3 rounded-full hover:scale-110 transition-transform" id="prevVideo">
+                    <i data-lucide="chevron-left" class="w-6 h-6"></i>
+                </button>
+                <button class="absolute right-0 top-1/2 -translate-y-1/2 bg-purple text-white p-3 rounded-full hover:scale-110 transition-transform" id="nextVideo">
+                    <i data-lucide="chevron-right" class="w-6 h-6"></i>
+                </button>
+            </div>
+            
+            <!-- Slider Dots -->
+            <div class="flex justify-center space-x-3 mt-8" id="videoDots"></div>
+        </div>
+    </section>
+    
+    <!-- Contact Form Section -->
+    <section class="py-20 bg-pearl" id="contact">
+        <div class="container mx-auto px-6">
+            <h2 class="font-heading text-4xl md:text-5xl font-bold text-center text-navy mb-4">
+                Let's Make Your Brand the Next Big Thing!
+            </h2>
+            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+                Fill out the form below and our team will get back to you within 24 hours
+            </p>
+            
+            <div class="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-8 md:p-12 border-2 border-pink">
+                <form id="contactForm" class="space-y-6">
+                    <!-- User Type Toggle -->
+                    <div class="flex justify-center mb-8">
+                        <div class="bg-gray-100 p-1 rounded-full inline-flex">
+                            <button type="button" class="user-type-btn active px-8 py-3 rounded-full bg-purple text-white font-accent font-semibold transition-all" data-type="brand">I'm a Brand</button>
+                            <button type="button" class="user-type-btn px-8 py-3 rounded-full text-navy font-accent font-semibold transition-all" data-type="creator">I'm a Creator</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Brand Fields -->
+                    <div id="brandFields" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="input-group">
+                                <input type="text" id="companyName" placeholder=" " required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-pink focus:outline-none transition-colors peer">
+                                <label for="companyName" class="absolute left-4 top-3 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-sm peer-focus:text-pink peer-not-placeholder-shown:-top-6 peer-not-placeholder-shown:text-sm">Company Name</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="url" id="websiteUrl" placeholder=" " required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-pink focus:outline-none transition-colors peer">
+                                <label for="websiteUrl" class="absolute left-4 top-3 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-sm peer-focus:text-pink peer-not-placeholder-shown:-top-6 peer-not-placeholder-shown:text-sm">Website URL</label>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-navy font-semibold mb-2">Industry</label>
+                                <select class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-pink focus:outline-none transition-colors">
+                                    <option>Fashion & Apparel</option>
+                                    <option>Technology</option>
+                                    <option>Health & Wellness</option>
+                                    <option>Food & Beverage</option>
+                                    <option>Travel & Hospitality</option>
+                                    <option>Entertainment</option>
+                                    <option>Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-navy font-semibold mb-2">Budget Range</label>
+                                <input type="range" min="1000" max="100000" step="1000" class="w-full accent-purple">
+                                <div class="flex justify-between text-sm text-gray-500">
+                                    <span>$1K</span>
+                                    <span>$100K+</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-navy font-semibold mb-3">Campaign Goals</label>
+                            <div class="grid grid-cols-3 gap-4">
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="w-5 h-5 accent-purple">
+                                    <span class="text-gray-700">Brand Awareness</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="w-5 h-5 accent-purple">
+                                    <span class="text-gray-700">Sales</span>
+                                </label>
+                                <label class="flex items-center space-x-2 cursor-pointer">
+                                    <input type="checkbox" class="w-5 h-5 accent-purple">
+                                    <span class="text-gray-700">Engagement</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Creator Fields -->
+                    <div id="creatorFields" class="space-y-6 hidden">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="input-group">
+                                <input type="text" id="fullName" placeholder=" " required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-pink focus:outline-none transition-colors peer">
+                                <label for="fullName" class="absolute left-4 top-3 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-sm peer-focus:text-pink peer-not-placeholder-shown:-top-6 peer-not-placeholder-shown:text-sm">Full Name</label>
+                            </div>
+                            <div class="input-group">
+                                <input type="email" id="email" placeholder=" " required class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-pink focus:outline-none transition-colors peer">
+                                <label for="email" class="absolute left-4 top-3 text-gray-500 transition-all peer-focus:-top-6 peer-focus:text-sm peer-focus:text-pink peer-not-placeholder-shown:-top-6 peer-not-placeholder-shown:text-sm">Email Address</label>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-navy font-semibold mb-2">Primary Platform</label>
+                                <select class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-pink focus:outline-none transition-colors">
+                                    <option>Instagram</option>
+                                    <option>TikTok</option>
+                                    <option>YouTube</option>
+                                    <option>Twitter/X</option>
+                                    <option>LinkedIn</option>
+                                    <option>Multiple</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-navy font-semibold mb-2">Follower Count</label>
+                                <input type="number" placeholder="e.g., 50000" class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-pink focus:outline-none transition-colors">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Common Fields -->
+                    <div>
+                        <label class="block text-navy font-semibold mb-2">Message</label>
+                        <textarea rows="4" placeholder="Tell us about your project or goals..." class="w-full px-4 py-3 border-2 border-gray-200 rounded-lg focus:border-pink focus:outline-none transition-colors resize-none"></textarea>
+                    </div>
+                    
+                    <!-- File Upload -->
+                    <div>
+                        <label class="block text-navy font-semibold mb-2">Upload Media (Optional)</label>
+                        <div class="border-2 border-dashed border-pink rounded-lg p-8 text-center hover:bg-pink/5 transition-colors cursor-pointer" id="dropZone">
+                            <i data-lucide="upload-cloud" class="w-12 h-12 text-pink mx-auto mb-3"></i>
+                            <p class="text-gray-600">Drag & drop files here or click to browse</p>
+                            <p class="text-sm text-gray-400 mt-1">PDF, PNG, JPG up to 10MB</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-purple text-white py-4 rounded-full font-accent font-bold text-lg hover:bg-gradient-to-r hover:from-purple hover:to-pink transition-all hover:scale-102 flex items-center justify-center">
+                        <span>Submit Application</span>
+                        <i data-lucide="arrow-right" class="ml-2 w-5 h-5"></i>
+                    </button>
+                    
+                    <!-- Success Message -->
+                    <div id="successMessage" class="hidden text-center py-8">
+                        <div class="w-20 h-20 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i data-lucide="check" class="w-10 h-10 text-white"></i>
+                        </div>
+                        <h3 class="font-heading text-2xl font-bold text-navy mb-2">Thank You!</h3>
+                        <p class="text-gray-600">We'll be in touch within 24 hours.</p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer class="bg-navy text-white pt-16 pb-8">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+                <!-- Brand Column -->
+                <div>
+                    <a href="#" class="font-heading text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple to-pink inline-block mb-4">Collabfy</a>
+                    <p class="text-pearl/70 mb-6">Connecting Brands with Influence</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="w-10 h-10 bg-purple rounded-full flex items-center justify-center hover:bg-pink hover:rotate-360 transition-all">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-purple rounded-full flex items-center justify-center hover:bg-pink hover:rotate-360 transition-all">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-purple rounded-full flex items-center justify-center hover:bg-pink hover:rotate-360 transition-all">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="w-10 h-10 bg-purple rounded-full flex items-center justify-center hover:bg-pink hover:rotate-360 transition-all">
+                            <i data-lucide="youtube" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h4 class="font-heading text-xl font-bold mb-6">Quick Links</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#how-it-works" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">How It Works</a></li>
+                        <li><a href="#pricing" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Pricing</a></li>
+                        <li><a href="#case-studies" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Case Studies</a></li>
+                        <li><a href="#blog" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Blog</a></li>
+                        <li><a href="#careers" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Careers</a></li>
+                    </ul>
+                </div>
+                
+                <!-- For Creators -->
+                <div>
+                    <h4 class="font-heading text-xl font-bold mb-6">For Creators</h4>
+                    <ul class="space-y-3">
+                        <li><a href="#join" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Join as Creator</a></li>
+                        <li><a href="#resources" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Creator Resources</a></li>
+                        <li><a href="#success" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Success Stories</a></li>
+                        <li><a href="#monetization" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Monetization Guide</a></li>
+                        <li><a href="#community" class="text-pearl/70 hover:text-pink hover:translate-x-2 transition-all inline-block">Community</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="font-heading text-xl font-bold mb-6">Stay in the Loop</h4>
+                    <form class="space-y-3">
+                        <input type="email" placeholder="Your email address" class="w-full px-4 py-3 rounded-lg bg-white/10 border border-white/20 focus:border-pink focus:outline-none text-white placeholder-pearl/50">
+                        <button type="submit" class="w-full bg-purple text-white py-3 rounded-lg font-accent font-semibold hover:bg-pink transition-all">Subscribe</button>
+                    </form>
+                    <p class="text-xs text-pearl/50 mt-3">We respect your privacy. No spam.</p>
+                </div>
+            </div>
+            
+            <!-- Bottom Bar -->
+            <div class="border-t border-white/20 pt-8">
+                <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                    <p class="text-pearl/50 text-sm">© 2024 Collabfy. All rights reserved.</p>
+                    <div class="flex space-x-6 text-sm">
+                        <a href="#privacy" class="text-pearl/50 hover:text-pink transition-colors">Privacy Policy</a>
+                        <a href="#terms" class="text-pearl/50 hover:text-pink transition-colors">Terms of Service</a>
+                        <a href="#cookies" class="text-pearl/50 hover:text-pink transition-colors">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Live Chat Button -->
+    <button class="fixed bottom-6 right-6 bg-purple text-white p-4 rounded-full shadow-lg hover:scale-110 transition-all pulse-glow z-50" id="liveChat">
+        <i data-lucide="message-circle" class="w-6 h-6"></i>
+    </button>
+    
+    <!-- JavaScript -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+        
+        // Preloader
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    initAnimations();
+                }, 500);
+            }, 1000);
+        });
+        
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+        });
+        
+        document.querySelectorAll('a, button, .cursor-pointer').forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+        });
+        
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const progress = document.getElementById('scrollProgress');
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            progress.style.width = scrollPercent + '%';
+        });
+        
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 100) {
+                navbar.classList.add('bg-navy/95');
+            } else {
+                navbar.classList.remove('bg-navy/95');
+            }
+        });
+        
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const closeMobileMenu = document.getElementById('closeMobileMenu');
+        const mobileMenu = document.getElementById('mobileMenu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('translate-x-full');
+        });
+        
+        closeMobileMenu.addEventListener('click', () => {
+            mobileMenu.classList.add('translate-x-full');
+        });
+        
+        // Generate Particles
+        const particlesContainer = document.getElementById('particles');
+        for (let i = 0; i < 50; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.width = Math.random() * 5 + 2 + 'px';
+            particle.style.height = particle.style.width;
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.top = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 20 + 's';
+            particle.style.animationDuration = Math.random() * 20 + 10 + 's';
+            particlesContainer.appendChild(particle);
+        }
+        
+        // Counter Animation
+        function animateCounter(element) {
+            const target = parseInt(element.getAttribute('data-count'));
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+            
+            const timer = setInterval(() => {
+                current += step;
+                if (current >= target) {
+                    element.textContent = target.toLocaleString() + (element.nextElementSibling.textContent.includes('%') ? '%' : '+');
+                    clearInterval(timer);
+                } else {
+                    element.textContent = Math.floor(current).toLocaleString();
+                }
+            }, 16);
+        }
+        
+        // GSAP Animations
+        function initAnimations() {
+            gsap.registerPlugin(ScrollTrigger);
+            
+            // Hero Title Reveal
+            gsap.from('#heroTitle .text-reveal', {
+                y: 100,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.2,
+                ease: 'power4.out'
+            });
+            
+            // Hero Subtitle
+            gsap.from('#heroSubtitle', {
+                y: 50,
+                opacity: 0,
+                duration: 1,
+                delay: 0.8,
+                ease: 'power3.out'
+            });
+            
+            // Hero CTAs
+            gsap.from('#heroCTAs', {
+                x: -50,
+                opacity: 0,
+                duration: 1,
+                delay: 1,
+                ease: 'power3.out'
+            });
+            
+            // Hero Image
+            gsap.from('#heroImage', {
+                x: 50,
+                opacity: 0,
+                duration: 1.2,
+                delay: 0.5,
+                ease: 'power3.out'
+            });
+            
+            // Counter Animation on Scroll
+            gsap.utils.toArray('[data-count]').forEach(counter => {
+                ScrollTrigger.create({
+                    trigger: counter,
+                    start: 'top 80%',
+                    onEnter: () => animateCounter(counter)
+                });
+            });
+            
+            // Service Cards Stagger
+            gsap.from('.service-card', {
+                scrollTrigger: {
+                    trigger: '#services',
+                    start: 'top 80%'
+                },
+                y: 100,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.2,
+                ease: 'power3.out'
+            });
+            
+            // Comparison Items
+            gsap.from('.comparison-item', {
+                scrollTrigger: {
+                    trigger: '#comparison',
+                    start: 'top 80%'
+                },
+                x: -50,
+                opacity: 0,
+                duration: 0.6,
+                stagger: 0.1,
+                ease: 'power3.out'
+            });
+            
+            // Creator Cards
+            gsap.from('.creator-card', {
+                scrollTrigger: {
+                    trigger: '#creators',
+                    start: 'top 80%'
+                },
+                y: 80,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: 'power3.out'
+            });
+            
+            // Team Cards
+            gsap.from('.team-card', {
+                scrollTrigger: {
+                    trigger: '#team',
+                    start: 'top 80%'
+                },
+                scale: 0.8,
+                opacity: 0,
+                duration: 1,
+                stagger: 0.3,
+                ease: 'back.out(1.7)'
+            });
+        }
+        
+        // Form Toggle
+        const userTypeBtns = document.querySelectorAll('.user-type-btn');
+        const brandFields = document.getElementById('brandFields');
+        const creatorFields = document.getElementById('creatorFields');
+        
+        userTypeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                userTypeBtns.forEach(b => {
+                    b.classList.remove('active', 'bg-purple', 'text-white');
+                    b.classList.add('text-navy');
+                });
+                btn.classList.add('active', 'bg-purple', 'text-white');
+                btn.classList.remove('text-navy');
+                
+                if (btn.dataset.type === 'brand') {
+                    brandFields.classList.remove('hidden');
+                    creatorFields.classList.add('hidden');
+                } else {
+                    brandFields.classList.add('hidden');
+                    creatorFields.classList.remove('hidden');
+                }
+            });
+        });
+        
+        // Form Submission
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            // Show loading
+            submitBtn.innerHTML = '<div class="spinner w-6 h-6 mr-2"></div> Submitting...';
+            submitBtn.disabled = true;
+            
+            // Simulate submission
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                document.getElementById('successMessage').classList.remove('hidden');
+                
+                // Confetti effect
+                createConfetti();
+            }, 2000);
+        });
+        
+        // Confetti Effect
+        function createConfetti() {
+            const colors = ['#982598', '#E491C9', '#F1E9E9'];
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'fixed';
+                confetti.style.width = '10px';
+                confetti.style.height = '10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.zIndex = '9999';
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                document.body.appendChild(confetti);
+                
+                gsap.to(confetti, {
+                    y: window.innerHeight + 10,
+                    rotation: Math.random() * 720,
+                    duration: Math.random() * 3 + 2,
+                    ease: 'power1.out',
+                    onComplete: () => confetti.remove()
+                });
+            }
+        }
+        
+        // Video Slider
+        const videoSliderContent = document.getElementById('videoSliderContent');
+        const prevVideo = document.getElementById('prevVideo');
+        const nextVideo = document.getElementById('nextVideo');
+        const videoDots = document.getElementById('videoDots');
+        let currentSlide = 0;
+        const totalSlides = 5;
+        
+        // Create dots
+        for (let i = 0; i < totalSlides; i++) {
+            const dot = document.createElement('button');
+            dot.className = `w-3 h-3 rounded-full ${i === 0 ? 'bg-pink' : 'bg-gray-300'}`;
+            dot.addEventListener('click', () => goToSlide(i));
+            videoDots.appendChild(dot);
+        }
+        
+        function updateDots() {
+            videoDots.querySelectorAll('button').forEach((dot, index) => {
+                dot.className = `w-3 h-3 rounded-full ${index === currentSlide ? 'bg-pink' : 'bg-gray-300'}`;
+            });
+        }
+        
+        function goToSlide(index) {
+            currentSlide = index;
+            const slideWidth = 340; // card width + gap
+            videoSliderContent.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
+            updateDots();
+        }
+        
+        prevVideo.addEventListener('click', () => {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            goToSlide(currentSlide);
+        });
+        
+        nextVideo.addEventListener('click', () => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            goToSlide(currentSlide);
+        });
+        
+        // Auto-play slider
+        setInterval(() => {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            goToSlide(currentSlide);
+        }, 5000);
+        
+        // Filter Tabs
+        const filterTabs = document.querySelectorAll('.filter-tab');
+        const creatorCards = document.querySelectorAll('.creator-card');
+        
+        filterTabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                filterTabs.forEach(t => {
+                    t.classList.remove('active', 'bg-purple', 'text-white');
+                    t.classList.add('border-2', 'border-purple', 'text-navy');
+                });
+                tab.classList.add('active', 'bg-purple', 'text-white');
+                tab.classList.remove('border-2', 'border-purple', 'text-navy');
+                
+                const filter = tab.dataset.filter;
+                
+                creatorCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                        gsap.from(card, { scale: 0.8, opacity: 0, duration: 0.4 });
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Drag & Drop Zone
+        const dropZone = document.getElementById('dropZone');
+        
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('bg-pink/10');
+        });
+        
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('bg-pink/10');
+        });
+        
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('bg-pink/10');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                dropZone.innerHTML = `<div class="text-green-500"><i data-lucide="check" class="w-12 h-12 mx-auto mb-3"></i><p>${files[0].name} uploaded successfully</p></div>`;
+                lucide.createIcons();
+            }
+        });
+        
+        dropZone.addEventListener('click', () => {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = (e) => {
+                if (e.target.files.length > 0) {
+                    dropZone.innerHTML = `<div class="text-green-500"><i data-lucide="check" class="w-12 h-12 mx-auto mb-3"></i><p>${e.target.files[0].name} uploaded successfully</p></div>`;
+                    lucide.createIcons();
+                }
+            };
+            input.click();
+        });
+        
+        // Magnetic Buttons
+        document.querySelectorAll('.magnetic-btn').forEach(btn => {
+            btn.addEventListener('mousemove', (e) => {
+                const rect = btn.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                btn.style.transform = `translate(${x * 0.3}px, ${y * 0.3}px)`;
+            });
+            
+            btn.addEventListener('mouseleave', () => {
+                btn.style.transform = 'translate(0, 0)';
+            });
+        });
+        
+        // 3D Tilt Effect on Hero Image
+        const heroImage = document.getElementById('heroImage');
+        if (heroImage) {
+            heroImage.addEventListener('mousemove', (e) => {
+                const rect = heroImage.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = (y - centerY) / 10;
+                const rotateY = (centerX - x) / 10;
+                
+                heroImage.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+            });
+            
+            heroImage.addEventListener('mouseleave', () => {
+                heroImage.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
+            });
+        }
+        
+        // Smooth Scroll with Lenis
+        const lenis = new Lenis({
+            duration: 1.2,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            direction: 'vertical',
+            gestureDirection: 'vertical',
+            smooth: true,
+            mouseMultiplier: 1,
+            smoothTouch: false,
+            touchMultiplier: 2,
+        });
+        
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        
+        requestAnimationFrame(raf);
+        
+        // Intersection Observer for Lazy Loading
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+        
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.dataset.src || img.src;
+                    img.classList.remove('lazy');
+                    observer.unobserve(img);
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('img[data-src]').forEach(img => {
+            imageObserver.observe(img);
+        });
+        
+        console.log('🚀 Collabfy Landing Page Loaded Successfully!');
+    </script>
+</body>
+</html>
